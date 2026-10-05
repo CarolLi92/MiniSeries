@@ -50,7 +50,14 @@ def api_key() -> str:
     return key
 
 
-def build_scene(line: Line, cast: dict, avatar_iv: bool) -> dict:
+def background(value: str) -> dict:
+    """A hex colour, or an http(s) image URL HeyGen can fetch (e.g. a raw GitHub link)."""
+    if value.startswith(("http://", "https://")):
+        return {"type": "image", "url": value}
+    return {"type": "color", "value": value}
+
+
+def build_scene(line: Line, cast: dict, avatar_iv: bool, bg: str | None = None) -> dict:
     who = cast.get(line.speaker)
     if not who:
         sys.exit(f"No cast entry for speaker {line.speaker!r} in cast.json")
@@ -60,7 +67,7 @@ def build_scene(line: Line, cast: dict, avatar_iv: bool) -> dict:
     return {
         "character": character,
         "voice": {"type": "text", "input_text": line.text, "voice_id": who["voice_id"]},
-        "background": {"type": "color", "value": who.get("background", "#000000")},
+        "background": background(bg or who.get("background", "#000000")),
     }
 
 
@@ -114,6 +121,7 @@ def main() -> None:
     p.add_argument("--lines", help="Only these line numbers, e.g. 13-16 (see parse_script.py)")
     p.add_argument("--single-video", action="store_true", help="One video instead of one per section")
     p.add_argument("--aspect-ratio", default="16:9", choices=DIMENSIONS)
+    p.add_argument("--background", help="Override every character's background: hex colour or image URL")
     p.add_argument("--avatar-iv", action="store_true", help="Use Avatar IV motion (better, costs more)")
     p.add_argument("--output-dir", default="output")
     p.add_argument("--no-wait", action="store_true", help="Submit and exit; don't poll or download")
@@ -144,7 +152,7 @@ def main() -> None:
     for name, chunk in group_lines(lines, args.single_video):
         body = {
             "title": f"{Path(args.script).stem} · {name}",
-            "video_inputs": [build_scene(l, cast, args.avatar_iv) for l in chunk],
+            "video_inputs": [build_scene(l, cast, args.avatar_iv, args.background) for l in chunk],
             "dimension": DIMENSIONS[args.aspect_ratio],
         }
         label = f"{name}: lines {chunk[0].index}-{chunk[-1].index}, {sum(len(l.text) for l in chunk)} chars"

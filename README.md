@@ -18,6 +18,7 @@ scripts/ep01.md  ──parse_script.py──▶  33 dialogue lines  ──make_e
    - one section: `python heygen/make_episode.py --section "TRUST"`
    - the whole episode, one video per section: `python heygen/make_episode.py`
    - add `--avatar-iv` for HeyGen's Avatar IV motion, `--aspect-ratio 9:16` for Shorts.
+   - `--background <hex or image URL>` swaps the set for every line. Ep2 uses the indoor cafe in `heygen/backgrounds/cafe-ep02.jpg` (drawn from `cafe-ep02.html`), passed as its raw GitHub URL so HeyGen can fetch it.
 
 Videos land in `output/` (git-ignored) and in your HeyGen library; `output/manifest.json` records every video ID and share link.
 
