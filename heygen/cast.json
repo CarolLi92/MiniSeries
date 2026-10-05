@@ -1,0 +1,15 @@
+{
+  "_comment": "Who plays each script character in HeyGen. IDs come from `python heygen/make_episode.py --list-avatars`. Swap talking_photo_id to use another look (e.g. 'Effie at the podcast desk').",
+  "NIA": {
+    "talking_photo_id": "df8e7ee5ffdd49959cf067b874df7975",
+    "voice_id": "c7c398ea067c4f43a9d2e15dd7c59cf4",
+    "_voice_name": "Spirited Sophie (Nia's default HeyGen voice)",
+    "background": "#1f2a36"
+  },
+  "EFFIE": {
+    "talking_photo_id": "6611456c5d3e4c499f0166fe5ee66d5f",
+    "voice_id": "df0241c21fba4ecdbbc6787505157c69",
+    "_voice_name": "Carol - Voice (Carol's cloned voice)",
+    "background": "#2b2620"
+  }
+}
